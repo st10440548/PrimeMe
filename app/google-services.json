@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "541229950137",
+    "project_id": "primeme-11589",
+    "storage_bucket": "primeme-11589.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541229950137:android:e2de2e74b6a21f83306768",
+        "android_client_info": {
+          "package_name": "com.primeme.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "541229950137-on99vskcrk7nvfvbr70a8k37ssgsonv7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.primeme.app",
+            "certificate_hash": "8eab071bd4230a1aeabf54dff911c5eff337278e"
+          }
+        },
+        {
+          "client_id": "541229950137-2dq6rrh4odk5rd3ga4tgi8k1mb6gpdko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWV9350DbIQoEyFFEH_Oub9ju1AHFBJwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "541229950137-2dq6rrh4odk5rd3ga4tgi8k1mb6gpdko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
