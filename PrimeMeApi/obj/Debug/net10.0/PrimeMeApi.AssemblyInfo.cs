@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PrimeMeApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eaa6ea0492ba513285e6fbaae131fb4682532c7e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c76180c5e3c079b434be98f64ef19eb367df2b4")]
 [assembly: System.Reflection.AssemblyProductAttribute("PrimeMeApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PrimeMeApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -36,6 +36,19 @@
             "related": ".pdb;.xml"
           }
         }
+      },
+      "Npgsql/10.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net10.0/Npgsql.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Npgsql.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
@@ -75,11 +88,31 @@
         "microsoft.openapi.2.0.0.nupkg.sha512",
         "microsoft.openapi.nuspec"
       ]
+    },
+    "Npgsql/10.0.3": {
+      "sha512": "7nb5YzXuvWWJxB0J8DiyL3we+X4FOctZrt0fIBnucOIaIevFEEwGQVZKtiu9olXdlNAK1eNgqSral6r/jlhI4w==",
+      "type": "package",
+      "path": "npgsql/10.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net10.0/Npgsql.dll",
+        "lib/net10.0/Npgsql.xml",
+        "lib/net8.0/Npgsql.dll",
+        "lib/net8.0/Npgsql.xml",
+        "lib/net9.0/Npgsql.dll",
+        "lib/net9.0/Npgsql.xml",
+        "npgsql.10.0.3.nupkg.sha512",
+        "npgsql.nuspec",
+        "postgresql.png"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Microsoft.AspNetCore.OpenApi >= 10.0.5"
+      "Microsoft.AspNetCore.OpenApi >= 10.0.5",
+      "Npgsql >= 10.0.3"
     ]
   },
   "packageFolders": {
@@ -88,11 +121,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj",
+      "projectUniqueName": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.csproj",
       "projectName": "PrimeMeApi",
-      "projectPath": "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj",
+      "projectPath": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.csproj",
       "packagesPath": "/Users/ronald/.nuget/packages/",
-      "outputPath": "/Users/ronald/PrimeMeApi/obj/",
+      "outputPath": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/ronald/.nuget/NuGet/NuGet.Config"
@@ -128,6 +161,10 @@
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
             "version": "[10.0.5, )"
+          },
+          "Npgsql": {
+            "target": "Package",
+            "version": "[10.0.3, )"
           }
         },
         "imports": [

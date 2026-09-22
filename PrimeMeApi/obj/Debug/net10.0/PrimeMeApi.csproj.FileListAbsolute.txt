@@ -32,3 +32,15 @@
 /Users/ronald/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.pdb
 /Users/ronald/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.genruntimeconfig.cache
 /Users/ronald/PrimeMeApi/obj/Debug/net10.0/ref/PrimeMeApi.dll
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.csproj.AssemblyReference.cache
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/rpswa.dswa.cache.json
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.AssemblyInfoInputs.cache
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.AssemblyInfo.cs
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.csproj.CoreCompileInputs.cache
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.MvcApplicationPartsAssemblyInfo.cs
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.MvcApplicationPartsAssemblyInfo.cache
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.sourcelink.json
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.dll
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/refint/PrimeMeApi.dll
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/Debug/net10.0/PrimeMeApi.pdb

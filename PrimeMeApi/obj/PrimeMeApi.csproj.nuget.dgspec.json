@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj": {}
+    "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.csproj": {}
   },
   "projects": {
-    "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj": {
+    "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj",
+        "projectUniqueName": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.csproj",
         "projectName": "PrimeMeApi",
-        "projectPath": "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj",
+        "projectPath": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.csproj",
         "packagesPath": "/Users/ronald/.nuget/packages/",
-        "outputPath": "/Users/ronald/PrimeMeApi/obj/",
+        "outputPath": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/ronald/.nuget/NuGet/NuGet.Config"
@@ -47,6 +47,10 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[10.0.5, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[10.0.3, )"
             }
           },
           "imports": [

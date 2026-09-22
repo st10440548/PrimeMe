@@ -1,20 +1,32 @@
 namespace PrimeMeApi.Tests;
 
-public class ApiTests
+public static class ApiTests
 {
-    [Fact]
-    public void GoalTitle_ShouldNotBeEmpty()
+    public static void Run()
+    {
+        GoalTitle_ShouldNotBeEmpty();
+        GoalProgress_ShouldBeBetweenZeroAndOneHundred();
+
+        Console.WriteLine("All API unit tests passed.");
+    }
+
+    private static void GoalTitle_ShouldNotBeEmpty()
     {
         var title = "Build PrimeMe";
 
-        Assert.False(string.IsNullOrWhiteSpace(title));
+        if (string.IsNullOrWhiteSpace(title))
+            throw new Exception("Goal title validation failed.");
+
+        Console.WriteLine("PASS: Goal title validation");
     }
 
-    [Fact]
-    public void GoalProgress_ShouldBeBetweenZeroAndOneHundred()
+    private static void GoalProgress_ShouldBeBetweenZeroAndOneHundred()
     {
         var progress = 60;
 
-        Assert.InRange(progress, 0, 100);
+        if (progress < 0 || progress > 100)
+            throw new Exception("Goal progress validation failed.");
+
+        Console.WriteLine("PASS: Goal progress validation");
     }
 }

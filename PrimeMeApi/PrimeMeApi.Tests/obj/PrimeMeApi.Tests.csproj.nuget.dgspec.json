@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ronald/PrimeMeApi/PrimeMeApi.Tests/PrimeMeApi.Tests.csproj": {}
+    "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/PrimeMeApi.Tests.csproj": {}
   },
   "projects": {
-    "/Users/ronald/PrimeMeApi/PrimeMeApi.Tests/PrimeMeApi.Tests.csproj": {
+    "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/PrimeMeApi.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ronald/PrimeMeApi/PrimeMeApi.Tests/PrimeMeApi.Tests.csproj",
+        "projectUniqueName": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/PrimeMeApi.Tests.csproj",
         "projectName": "PrimeMeApi.Tests",
-        "projectPath": "/Users/ronald/PrimeMeApi/PrimeMeApi.Tests/PrimeMeApi.Tests.csproj",
+        "projectPath": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/PrimeMeApi.Tests.csproj",
         "packagesPath": "/Users/ronald/.nuget/packages/",
-        "outputPath": "/Users/ronald/PrimeMeApi/PrimeMeApi.Tests/obj/",
+        "outputPath": "/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/ronald/.nuget/NuGet/NuGet.Config"
@@ -43,24 +43,6 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "dependencies": {
-            "Microsoft.NET.Test.Sdk": {
-              "target": "Package",
-              "version": "[17.14.1, )"
-            },
-            "coverlet.collector": {
-              "target": "Package",
-              "version": "[6.0.4, )"
-            },
-            "xunit": {
-              "target": "Package",
-              "version": "[2.9.3, )"
-            },
-            "xunit.runner.visualstudio": {
-              "target": "Package",
-              "version": "[3.1.4, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

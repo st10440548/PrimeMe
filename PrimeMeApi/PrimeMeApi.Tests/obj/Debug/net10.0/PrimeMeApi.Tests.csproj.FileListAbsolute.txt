@@ -1,0 +1,15 @@
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/bin/Debug/net10.0/PrimeMeApi.Tests
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/bin/Debug/net10.0/PrimeMeApi.Tests.deps.json
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/bin/Debug/net10.0/PrimeMeApi.Tests.runtimeconfig.json
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/bin/Debug/net10.0/PrimeMeApi.Tests.dll
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/bin/Debug/net10.0/PrimeMeApi.Tests.pdb
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/PrimeMeApi.Tests.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/PrimeMeApi.Tests.AssemblyInfoInputs.cache
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/PrimeMeApi.Tests.AssemblyInfo.cs
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/PrimeMeApi.Tests.csproj.CoreCompileInputs.cache
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/PrimeMeApi.Tests.sourcelink.json
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/PrimeMeApi.Tests.dll
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/refint/PrimeMeApi.Tests.dll
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/PrimeMeApi.Tests.pdb
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/PrimeMeApi.Tests.genruntimeconfig.cache
+/Users/ronald/AndroidStudioProjects/PrimeMe/PrimeMeApi/PrimeMeApi.Tests/obj/Debug/net10.0/ref/PrimeMeApi.Tests.dll
