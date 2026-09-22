@@ -29,7 +29,7 @@ interface PrimeMeApi {
 
 object PrimeMeApiClient {
 
-    private const val BASE_URL = "http://10.0.0.203:5243/"
+    private const val BASE_URL = "https://primeme-api-7314-hjg8dvgcdbcdbtcm.southafricanorth-01.azurewebsites.net/"
 
     val api: PrimeMeApi by lazy {
         Retrofit.Builder()
