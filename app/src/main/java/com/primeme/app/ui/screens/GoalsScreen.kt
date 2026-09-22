@@ -19,35 +19,56 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-
-data class Goal(
-    val title: String,
-    val progress: Float
-)
+import com.primeme.app.data.remote.ApiGoal
+import com.primeme.app.data.remote.CreateGoalRequest
+import com.primeme.app.data.remote.PrimeMeApiClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun GoalsScreen(
     modifier: Modifier = Modifier
 ) {
     var goals by remember {
-        mutableStateOf(
-            listOf(
-                Goal("Run 10 km", 0.6f),
-                Goal("Read 2 books", 0.4f),
-                Goal("Learn piano", 0.25f)
-            )
-        )
+        mutableStateOf<List<ApiGoal>>(emptyList())
     }
 
     var showAddGoalDialog by remember {
         mutableStateOf(false)
+    }
+
+    var errorMessage by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        try {
+            goals = withContext(Dispatchers.IO) {
+                PrimeMeApiClient.api.getGoals()
+            }
+
+            errorMessage = null
+        } catch (exception: Exception) {
+            errorMessage = "Unable to load goals: ${exception.message}"
+        } finally {
+            isLoading = false
+        }
     }
 
     Column(
@@ -83,22 +104,19 @@ fun GoalsScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        if (isLoading) {
+            Text("Loading goals...")
+        }
+
+        if (errorMessage != null) {
+            Text(errorMessage!!)
+        }
+
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(goals) { goal ->
-                GoalCard(
-                    goal = goal,
-                    onComplete = {
-                        goals = goals.map {
-                            if (it == goal) {
-                                it.copy(progress = 1f)
-                            } else {
-                                it
-                            }
-                        }
-                    }
-                )
+                GoalCard(goal = goal)
             }
         }
     }
@@ -109,12 +127,22 @@ fun GoalsScreen(
                 showAddGoalDialog = false
             },
             onAddGoal = { title ->
-                goals = goals + Goal(
-                    title = title,
-                    progress = 0f
-                )
+                scope.launch {
+                    try {
+                        val newGoal = withContext(Dispatchers.IO) {
+                            PrimeMeApiClient.api.createGoal(
+                                CreateGoalRequest(title)
+                            )
+                        }
 
-                showAddGoalDialog = false
+                        goals = goals + newGoal
+                        errorMessage = null
+                        showAddGoalDialog = false
+                    } catch (exception: Exception) {
+                        errorMessage =
+                            "Unable to save goal: ${exception.message}"
+                    }
+                }
             }
         )
     }
@@ -122,8 +150,7 @@ fun GoalsScreen(
 
 @Composable
 private fun GoalCard(
-    goal: Goal,
-    onComplete: () -> Unit
+    goal: ApiGoal
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -139,29 +166,20 @@ private fun GoalCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             LinearProgressIndicator(
-                progress = { goal.progress },
+                progress = { goal.progress / 100f },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = "${(goal.progress * 100).toInt()}% complete"
-            )
+            Text("${goal.progress}% complete")
 
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedButton(
-                onClick = onComplete,
-                enabled = goal.progress < 1f
+                onClick = {}
             ) {
-                Text(
-                    text = if (goal.progress < 1f) {
-                        "Mark Complete"
-                    } else {
-                        "Completed"
-                    }
-                )
+                Text("Mark Complete")
             }
         }
     }
@@ -201,10 +219,7 @@ private fun AddGoalDialog(
 
                 if (showError) {
                     Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "Please enter a goal name."
-                    )
+                    Text("Please enter a goal name.")
                 }
             }
         },
@@ -222,9 +237,7 @@ private fun AddGoalDialog(
             }
         },
         dismissButton = {
-            TextButton(
-                onClick = onDismiss
-            ) {
+            TextButton(onClick = onDismiss) {
                 Text("Cancel")
             }
         }

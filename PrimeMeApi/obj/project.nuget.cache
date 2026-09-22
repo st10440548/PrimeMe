@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "dgSpecHash": "f1JACoFl6MA=",
+  "success": true,
+  "projectFilePath": "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj",
+  "expectedPackageFiles": [
+    "/Users/ronald/.nuget/packages/microsoft.aspnetcore.openapi/10.0.5/microsoft.aspnetcore.openapi.10.0.5.nupkg.sha512",
+    "/Users/ronald/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/ronald/PrimeMeApi/PrimeMeApi.csproj",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}
