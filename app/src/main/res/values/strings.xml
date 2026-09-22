@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PrimeMe</string>
+    <string name="default_web_client_id" translatable="false">541229950137-2dq6rrh4odk5rd3ga4tgi8k1mb6gpdko.apps.googleusercontent.com</string>
 </resources>
