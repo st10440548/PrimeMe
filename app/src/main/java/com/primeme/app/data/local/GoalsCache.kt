@@ -1,6 +1,8 @@
 package com.primeme.app.data.local
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
+import java.security.MessageDigest
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -40,9 +42,13 @@ abstract class PrimeMeDatabase : RoomDatabase() {
 /** Room-backed read-only offline cache. Network writes still require connectivity. */
 class GoalsCache(context: Context) {
     private val appContext = context.applicationContext
+    private val ownerUid = requireNotNull(FirebaseAuth.getInstance().currentUser?.uid) {
+        "Sign in before accessing cached goals"
+    }
     private val database = synchronized(PrimeMeDatabase::class.java) {
-        instance ?: Room.databaseBuilder(appContext, PrimeMeDatabase::class.java, "primeme_offline.db")
-            .build().also { instance = it }
+        val name = databaseName(ownerUid)
+        instances[name] ?: Room.databaseBuilder(appContext, PrimeMeDatabase::class.java, name)
+            .build().also { instances[name] = it }
     }
 
     fun save(goals: List<ApiGoal>) = runBlocking {
@@ -60,6 +66,15 @@ class GoalsCache(context: Context) {
     }
 
     companion object {
-        @Volatile private var instance: PrimeMeDatabase? = null
+        private val instances = mutableMapOf<String, PrimeMeDatabase>()
+
+        /** UID is hashed to avoid placing a raw account identifier in a filename. */
+        internal fun databaseName(uid: String): String {
+            require(uid.isNotBlank()) { "Account UID cannot be blank" }
+            val hash = MessageDigest.getInstance("SHA-256")
+                .digest(uid.toByteArray(Charsets.UTF_8))
+                .joinToString("") { "%02x".format(it) }
+            return "primeme_goals_$hash.db"
+        }
     }
 }
