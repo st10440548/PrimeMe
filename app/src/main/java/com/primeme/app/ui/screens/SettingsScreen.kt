@@ -171,8 +171,11 @@ fun SettingsScreen(
         SettingSwitch(
             title = t("Daily reminders", "Izikhumbuzi zansuku zonke"),
             checked = remindersEnabled,
-            onCheckedChange = {
-                remindersEnabled = it
+            onCheckedChange = { enabled ->
+                remindersEnabled = enabled
+                preferences.edit()
+                    .putBoolean("reminders_enabled", enabled)
+                    .apply()
                 showSavedMessage = false
             }
         )
