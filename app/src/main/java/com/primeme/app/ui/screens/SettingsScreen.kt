@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -27,20 +28,25 @@ import androidx.compose.ui.unit.dp
 fun SettingsScreen(
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val preferences = remember(context) {
+        context.applicationContext.getSharedPreferences("primeme_settings", android.content.Context.MODE_PRIVATE)
+    }
+
     var displayName by remember {
-        mutableStateOf("")
+        mutableStateOf(preferences.getString("display_name", "") ?: "")
     }
 
     var dailyFocus by remember {
-        mutableStateOf("3")
+        mutableStateOf(preferences.getInt("daily_focus", 3).toString())
     }
 
     var remindersEnabled by remember {
-        mutableStateOf(true)
+        mutableStateOf(preferences.getBoolean("reminders_enabled", true))
     }
 
     var darkModeEnabled by remember {
-        mutableStateOf(false)
+        mutableStateOf(preferences.getBoolean("dark_mode_enabled", false))
     }
 
     var showSavedMessage by remember {
@@ -187,6 +193,12 @@ fun SettingsScreen(
                 focusError = !validFocus
 
                 if (validName && validFocus) {
+                    preferences.edit()
+                        .putString("display_name", displayName.trim())
+                        .putInt("daily_focus", focusValue!!)
+                        .putBoolean("reminders_enabled", remindersEnabled)
+                        .putBoolean("dark_mode_enabled", darkModeEnabled)
+                        .apply()
                     showSavedMessage = true
                 } else {
                     showSavedMessage = false
