@@ -166,7 +166,12 @@ fun PrimeMeNavigation() {
 
             2 -> SettingsScreen(
                 modifier = Modifier.padding(innerPadding),
-                onLanguageChange = { isZulu = it }
+                onLanguageChange = { isZulu = it },
+                onSignOut = {
+                    authViewModel.signOut()
+                    unlocked = false
+                    selectedItem = 0
+                }
             )
         }
     }
