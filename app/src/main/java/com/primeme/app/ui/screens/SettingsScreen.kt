@@ -30,7 +30,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    onLanguageChange: (Boolean) -> Unit = {}
+    onLanguageChange: (Boolean) -> Unit = {},
+    onSignOut: () -> Unit = {}
 ) {
     val isZulu = LocalIsZulu.current
     fun t(en: String, zu: String) = translate(isZulu, en, zu)
@@ -223,6 +224,14 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(t("Save Preferences", "Londoloza Izilungiselelo"))
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        OutlinedButton(
+            onClick = onSignOut,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(t("Sign Out", "Phuma"))
         }
 
         if (showSavedMessage) {
