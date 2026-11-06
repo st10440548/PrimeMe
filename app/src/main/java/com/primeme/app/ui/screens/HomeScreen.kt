@@ -1,6 +1,8 @@
 package com.primeme.app.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +21,17 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import com.primeme.app.data.local.GoalsCache
+import com.primeme.app.data.remote.ApiGoal
+import com.primeme.app.data.remote.PrimeMeApiClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import com.primeme.app.ui.localization.LocalIsZulu
 import com.primeme.app.ui.localization.translate
 import androidx.compose.ui.Alignment
@@ -32,9 +45,32 @@ fun HomeScreen(
 ) {
     val isZulu = LocalIsZulu.current
     fun t(en: String, zu: String) = translate(isZulu, en, zu)
+    val context = LocalContext.current
+    val cache = remember(context) { GoalsCache(context) }
+    var goals by remember { mutableStateOf<List<ApiGoal>>(emptyList()) }
+    var showProgress by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
+    var offline by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        val saved = withContext(Dispatchers.IO) { cache.load() }
+        if (saved != null) goals = saved
+        try {
+            val remote = withContext(Dispatchers.IO) { PrimeMeApiClient.api.getGoals() }
+            goals = remote
+            withContext(Dispatchers.IO) { cache.save(remote) }
+            offline = false
+        } catch (_: Exception) {
+            offline = true
+        } finally {
+            isLoading = false
+        }
+    }
+    val completed = goals.count { it.progress >= 100 }
+    val score = if (goals.isEmpty()) 0 else (completed * 100 / goals.size)
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(20.dp)
     ) {
         Text(
@@ -57,48 +93,62 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        PrimeScoreCard()
+        PrimeScoreCard(score)
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = t("Today's Focus", "Okubalulekile Namuhla"),
+            text = t("Active Goals", "Izinhloso Eziqhubekayo"),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        FocusItem(
-            title = t("Workout", "Ukujima"),
-            subtitle = t("Train for 45 minutes", "Zivocavoce imizuzu engu-45")
-        )
-
-        FocusItem(
-            title = t("Study", "Ukufunda"),
-            subtitle = t("Complete your planned study session", "Qedela isikhathi sakho sokufunda")
-        )
-
-        FocusItem(
-            title = t("Read", "Funda"),
-            subtitle = t("Read for at least 20 minutes", "Funda okungenani imizuzu engu-20")
-        )
+        val activeGoals = goals.filter { it.progress < 100 }
+        if (isLoading && goals.isEmpty()) {
+            Text(t("Loading your goals...", "Kulayishwa izinhloso zakho..."))
+        } else if (activeGoals.isEmpty()) {
+            Text(
+                if (goals.isEmpty()) t(
+                    "No active goals yet. Add a goal in the Goals tab to see it here.",
+                    "Azikho izinhloso ezisebenzayo. Engeza inhloso ekhasini Lezinhloso."
+                ) else t(
+                    "All your goals are complete. Great work!",
+                    "Zonke izinhloso zakho seziqediwe. Wenze kahle!"
+                )
+            )
+        } else {
+            activeGoals.forEach { goal ->
+                FocusItem(
+                    title = goal.title,
+                    subtitle = "${goal.progress}% " + t("complete", "kuqediwe")
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = {
-                // Progress functionality will be added later.
-            },
+            onClick = { showProgress = !showProgress },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = t("View Today's Progress", "Buka Inqubekelaphambili Yanamuhla"))
+            Text(text = t("View Goal Progress", "Buka Inqubekelaphambili Yezinhloso"))
+        }
+        if (showProgress) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(t("Overall Goal Progress", "Inqubekelaphambili Yezinhloso Zonke"), fontWeight = FontWeight.Bold)
+            Text(t("Completed", "Eziqediwe") + ": $completed / ${goals.size}")
+            Text(t("In progress", "Eziqhubekayo") + ": ${goals.size - completed}")
+            Text(t("Prime Score", "Amaphuzu e-Prime") + ": $score / 100")
+            if (isLoading) Text(t("Loading goals...", "Kulayishwa izinhloso..."))
+            if (offline) Text(t("Showing saved goals (offline)", "Kuboniswa izinhloso ezilondoloziwe"))
         }
     }
 }
 
 @Composable
-private fun PrimeScoreCard() {
+private fun PrimeScoreCard(score: Int) {
     val isZulu = LocalIsZulu.current
     fun t(en: String, zu: String) = translate(isZulu, en, zu)
     Card(
@@ -140,7 +190,7 @@ private fun PrimeScoreCard() {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "72",
+                    text = score.toString(),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
