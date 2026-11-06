@@ -6,6 +6,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -16,6 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.primeme.app.ui.localization.LocalIsZulu
+import com.primeme.app.ui.localization.translate
 import com.primeme.app.ui.screens.GoalsScreen
 import com.primeme.app.ui.screens.HomeScreen
 import com.primeme.app.ui.screens.LoginScreen
@@ -25,6 +29,8 @@ import com.primeme.app.viewmodel.AuthViewModel
 @Composable
 fun PrimeMeNavigation() {
     val context = LocalContext.current
+    val preferences = remember(context) { context.applicationContext.getSharedPreferences("primeme_settings", android.content.Context.MODE_PRIVATE) }
+    var isZulu by remember { mutableStateOf(preferences.getString("app_language", "en") == "zu") }
 
     val authViewModel: AuthViewModel = viewModel(
         factory = remember(context) {
@@ -60,11 +66,12 @@ fun PrimeMeNavigation() {
     }
 
     val items = listOf(
-        "Home",
-        "Goals",
-        "Settings"
+        translate(isZulu, "Home", "Ikhaya"),
+        translate(isZulu, "Goals", "Izinhloso"),
+        translate(isZulu, "Settings", "Izilungiselelo")
     )
 
+    CompositionLocalProvider(LocalIsZulu provides isZulu) {
     Scaffold(
         bottomBar = {
             NavigationBar {
@@ -102,8 +109,10 @@ fun PrimeMeNavigation() {
             )
 
             2 -> SettingsScreen(
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                onLanguageChange = { isZulu = it }
             )
         }
+    }
     }
 }

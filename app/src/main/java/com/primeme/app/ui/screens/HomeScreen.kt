@@ -19,6 +19,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.primeme.app.ui.localization.LocalIsZulu
+import com.primeme.app.ui.localization.translate
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +30,8 @@ import androidx.compose.ui.unit.dp
 fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
+    val isZulu = LocalIsZulu.current
+    fun t(en: String, zu: String) = translate(isZulu, en, zu)
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -42,12 +46,12 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "Good morning 👋",
+            text = t("Good morning 👋", "Sawubona 👋"),
             style = MaterialTheme.typography.titleMedium
         )
 
         Text(
-            text = "Let's chase your prime.",
+            text = t("Let's chase your prime.", "Asisebenzele impumelelo yakho."),
             style = MaterialTheme.typography.bodyMedium
         )
 
@@ -58,7 +62,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Today's Focus",
+            text = t("Today's Focus", "Okubalulekile Namuhla"),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
@@ -66,18 +70,18 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         FocusItem(
-            title = "Workout",
-            subtitle = "Train for 45 minutes"
+            title = t("Workout", "Ukujima"),
+            subtitle = t("Train for 45 minutes", "Zivocavoce imizuzu engu-45")
         )
 
         FocusItem(
-            title = "Study",
-            subtitle = "Complete your planned study session"
+            title = t("Study", "Ukufunda"),
+            subtitle = t("Complete your planned study session", "Qedela isikhathi sakho sokufunda")
         )
 
         FocusItem(
-            title = "Read",
-            subtitle = "Read for at least 20 minutes"
+            title = t("Read", "Funda"),
+            subtitle = t("Read for at least 20 minutes", "Funda okungenani imizuzu engu-20")
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -88,13 +92,15 @@ fun HomeScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "View Today's Progress")
+            Text(text = t("View Today's Progress", "Buka Inqubekelaphambili Yanamuhla"))
         }
     }
 }
 
 @Composable
 private fun PrimeScoreCard() {
+    val isZulu = LocalIsZulu.current
+    fun t(en: String, zu: String) = translate(isZulu, en, zu)
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -111,7 +117,7 @@ private fun PrimeScoreCard() {
         ) {
             Column {
                 Text(
-                    text = "Prime Score",
+                    text = t("Prime Score", "Amaphuzu e-Prime"),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -119,7 +125,7 @@ private fun PrimeScoreCard() {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "Keep building consistency.",
+                    text = t("Keep building consistency.", "Qhubeka nokuzimisela."),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -148,6 +154,8 @@ private fun FocusItem(
     title: String,
     subtitle: String
 ) {
+    val isZulu = LocalIsZulu.current
+    fun t(en: String, zu: String) = translate(isZulu, en, zu)
     Card(
         modifier = Modifier
             .fillMaxWidth()

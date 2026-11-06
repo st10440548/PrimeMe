@@ -19,6 +19,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import com.primeme.app.ui.localization.LocalIsZulu
+import com.primeme.app.ui.localization.translate
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,6 +41,8 @@ import kotlinx.coroutines.withContext
 fun GoalsScreen(
     modifier: Modifier = Modifier
 ) {
+    val isZulu = LocalIsZulu.current
+    fun t(en: String, zu: String) = translate(isZulu, en, zu)
     var goals by remember {
         mutableStateOf<List<ApiGoal>>(emptyList())
     }
@@ -82,14 +86,14 @@ fun GoalsScreen(
         ) {
             Column {
                 Text(
-                    text = "Your Goals",
+                    text = t("Your Goals", "Izinhloso Zakho"),
                     fontWeight = FontWeight.Bold
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "Keep moving toward your prime."
+                    text = t("Keep moving toward your prime.", "Qhubeka nokufeza izinhloso zakho.")
                 )
             }
 
@@ -98,14 +102,14 @@ fun GoalsScreen(
                     showAddGoalDialog = true
                 }
             ) {
-                Text("Add")
+                Text(t("Add", "Engeza"))
             }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         if (isLoading) {
-            Text("Loading goals...")
+            Text(t("Loading goals...", "Kulayishwa izinhloso..."))
         }
 
         if (errorMessage != null) {
@@ -171,6 +175,8 @@ private fun GoalCard(
     goal: ApiGoal,
     onCompleteGoal: (Int) -> Unit
 ) {
+    val isZulu = LocalIsZulu.current
+    fun t(en: String, zu: String) = translate(isZulu, en, zu)
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -191,7 +197,7 @@ private fun GoalCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text("${goal.progress}% complete")
+            Text("${goal.progress}% " + t("complete", "kuqediwe"))
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -200,8 +206,8 @@ private fun GoalCard(
                 enabled = goal.progress < 100
             ) {
                 Text(
-                    if (goal.progress >= 100) "Completed"
-                    else "Mark Complete"
+                    if (goal.progress >= 100) t("Completed", "Kuqediwe")
+                    else t("Mark Complete", "Maka Njengokuqediwe")
                 )
             }
         }
@@ -213,6 +219,8 @@ private fun AddGoalDialog(
     onDismiss: () -> Unit,
     onAddGoal: (String) -> Unit
 ) {
+    val isZulu = LocalIsZulu.current
+    fun t(en: String, zu: String) = translate(isZulu, en, zu)
     var title by remember {
         mutableStateOf("")
     }
@@ -224,7 +232,7 @@ private fun AddGoalDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Add Goal")
+            Text(t("Add Goal", "Engeza Inhloso"))
         },
         text = {
             Column {
@@ -235,14 +243,14 @@ private fun AddGoalDialog(
                         showError = false
                     },
                     label = {
-                        Text("Goal name")
+                        Text(t("Goal name", "Igama lenhloso"))
                     },
                     singleLine = true
                 )
 
                 if (showError) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("Please enter a goal name.")
+                    Text(t("Please enter a goal name.", "Sicela ufake igama lenhloso."))
                 }
             }
         },
@@ -256,12 +264,12 @@ private fun AddGoalDialog(
                     }
                 }
             ) {
-                Text("Add")
+                Text(t("Add", "Engeza"))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(t("Cancel", "Khansela"))
             }
         }
     )
