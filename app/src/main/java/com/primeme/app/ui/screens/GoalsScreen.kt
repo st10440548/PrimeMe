@@ -19,6 +19,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.primeme.app.notifications.GoalNotifications
 import androidx.compose.ui.platform.LocalContext
 import com.primeme.app.data.local.GoalsCache
 import com.primeme.app.ui.localization.LocalIsZulu
@@ -46,6 +51,16 @@ fun GoalsScreen(
     val isZulu = LocalIsZulu.current
     fun t(en: String, zu: String) = translate(isZulu, en, zu)
     val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* Android controls the permission result; alerts only show when granted. */ }
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
     val cache = remember(context) { GoalsCache(context) }
     var offline by remember { mutableStateOf(false) }
     var goals by remember {
@@ -147,6 +162,7 @@ fun GoalsScreen(
                                     if (it.id == goalId) updatedGoal else it
                                 }
                                 withContext(Dispatchers.IO) { cache.save(goals) }
+                                GoalNotifications.show(context, t("Goal completed", "Inhloso iqediwe"), t("Great work! Your goal is complete.", "Wenze kahle! Inhloso yakho isiqediwe."))
                                 errorMessage = null
                             } catch (exception: Exception) {
                                 errorMessage =
@@ -175,6 +191,7 @@ fun GoalsScreen(
 
                         goals = goals + newGoal
                         withContext(Dispatchers.IO) { cache.save(goals) }
+                        GoalNotifications.show(context, t("Goal created", "Inhloso idaliwe"), t("Your new goal has been saved.", "Inhloso yakho entsha ilondoloziwe."))
                         errorMessage = null
                         showAddGoalDialog = false
                     } catch (exception: Exception) {
