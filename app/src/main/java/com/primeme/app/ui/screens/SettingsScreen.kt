@@ -1,5 +1,7 @@
 package com.primeme.app.ui.screens
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +32,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    onLanguageChange: (Boolean) -> Unit = {}
+    onLanguageChange: (Boolean) -> Unit = {},
+    onSignOut: () -> Unit = {}
 ) {
     val isZulu = LocalIsZulu.current
     fun t(en: String, zu: String) = translate(isZulu, en, zu)
@@ -70,6 +73,7 @@ fun SettingsScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(20.dp)
     ) {
         Text(
@@ -223,6 +227,14 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(t("Save Preferences", "Londoloza Izilungiselelo"))
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        OutlinedButton(
+            onClick = onSignOut,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(t("Sign Out", "Phuma"))
         }
 
         if (showSavedMessage) {
