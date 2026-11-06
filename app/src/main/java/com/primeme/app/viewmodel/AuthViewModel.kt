@@ -55,6 +55,11 @@ class AuthViewModel(
         }
     }
 
+    fun signOut() {
+        googleSignInManager.signOut()
+        _uiState.value = AuthUiState(isSignedIn = false)
+    }
+
     fun clearError() {
         _uiState.value = _uiState.value.copy(
             errorMessage = null
