@@ -67,6 +67,8 @@ fun GoalsScreen(
         mutableStateOf<List<ApiGoal>>(emptyList())
     }
 
+    var goalPendingDeletion by remember { mutableStateOf<ApiGoal?>(null) }
+
     var showAddGoalDialog by remember {
         mutableStateOf(false)
     }
@@ -152,6 +154,7 @@ fun GoalsScreen(
                 GoalCard(
                     goal = goal,
                     offline = offline,
+                    onDeleteGoal = { goalPendingDeletion = goal },
                     onCompleteGoal = { goalId ->
                         scope.launch {
                             try {
@@ -173,6 +176,33 @@ fun GoalsScreen(
                 )
             }
         }
+    }
+
+    goalPendingDeletion?.let { selected ->
+        AlertDialog(
+            onDismissRequest = { goalPendingDeletion = null },
+            title = { Text(t("Delete goal?", "Susa inhloso?")) },
+            text = { Text(t("Permanently delete", "Susa unomphela") + " \"${selected.title}\"?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    goalPendingDeletion = null
+                    scope.launch {
+                        try {
+                            val response = withContext(Dispatchers.IO) {
+                                PrimeMeApiClient.api.deleteGoal(selected.id)
+                            }
+                            if (!response.isSuccessful) throw IllegalStateException("Server returned ${response.code()}")
+                            goals = goals.filterNot { it.id == selected.id }
+                            withContext(Dispatchers.IO) { cache.save(goals) }
+                            errorMessage = null
+                        } catch (exception: Exception) {
+                            errorMessage = t("Unable to delete goal: ", "Ayikwazanga ukususwa inhloso: ") + exception.message
+                        }
+                    }
+                }) { Text(t("Delete", "Susa")) }
+            },
+            dismissButton = { TextButton(onClick = { goalPendingDeletion = null }) { Text(t("Cancel", "Khansela")) } }
+        )
     }
 
     if (showAddGoalDialog) {
@@ -208,6 +238,7 @@ fun GoalsScreen(
 private fun GoalCard(
     goal: ApiGoal,
     offline: Boolean,
+    onDeleteGoal: () -> Unit,
     onCompleteGoal: (Int) -> Unit
 ) {
     val isZulu = LocalIsZulu.current
@@ -235,6 +266,11 @@ private fun GoalCard(
             Text("${goal.progress}% " + t("complete", "kuqediwe"))
 
             Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedButton(
+                onClick = onDeleteGoal,
+                enabled = !offline
+            ) { Text(t("Delete", "Susa")) }
 
             OutlinedButton(
                 onClick = { onCompleteGoal(goal.id) },
