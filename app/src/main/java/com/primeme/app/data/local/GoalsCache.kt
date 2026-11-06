@@ -1,6 +1,7 @@
 package com.primeme.app.data.local
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.primeme.app.data.remote.ApiGoal
@@ -12,12 +13,16 @@ class GoalsCache(context: Context) {
     )
     private val gson = Gson()
 
+    private fun userKey(): String? = FirebaseAuth.getInstance().currentUser?.uid?.let { "goals_json_$it" }
+
     fun save(goals: List<ApiGoal>) {
-        preferences.edit().putString("goals_json", gson.toJson(goals)).apply()
+        val key = userKey() ?: return
+        preferences.edit().putString(key, gson.toJson(goals)).apply()
     }
 
     fun load(): List<ApiGoal>? {
-        val json = preferences.getString("goals_json", null) ?: return null
+        val key = userKey() ?: return null
+        val json = preferences.getString(key, null) ?: return null
         return try {
             val type = object : TypeToken<List<ApiGoal>>() {}.type
             gson.fromJson<List<ApiGoal>>(json, type)
