@@ -98,27 +98,34 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = t("Today's Focus", "Okubalulekile Namuhla"),
+            text = t("Active Goals", "Izinhloso Eziqhubekayo"),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        FocusItem(
-            title = t("Workout", "Ukujima"),
-            subtitle = t("Train for 45 minutes", "Zivocavoce imizuzu engu-45")
-        )
-
-        FocusItem(
-            title = t("Study", "Ukufunda"),
-            subtitle = t("Complete your planned study session", "Qedela isikhathi sakho sokufunda")
-        )
-
-        FocusItem(
-            title = t("Read", "Funda"),
-            subtitle = t("Read for at least 20 minutes", "Funda okungenani imizuzu engu-20")
-        )
+        val activeGoals = goals.filter { it.progress < 100 }
+        if (isLoading && goals.isEmpty()) {
+            Text(t("Loading your goals...", "Kulayishwa izinhloso zakho..."))
+        } else if (activeGoals.isEmpty()) {
+            Text(
+                if (goals.isEmpty()) t(
+                    "No active goals yet. Add a goal in the Goals tab to see it here.",
+                    "Azikho izinhloso ezisebenzayo. Engeza inhloso ekhasini Lezinhloso."
+                ) else t(
+                    "All your goals are complete. Great work!",
+                    "Zonke izinhloso zakho seziqediwe. Wenze kahle!"
+                )
+            )
+        } else {
+            activeGoals.forEach { goal ->
+                FocusItem(
+                    title = goal.title,
+                    subtitle = "${goal.progress}% " + t("complete", "kuqediwe")
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
