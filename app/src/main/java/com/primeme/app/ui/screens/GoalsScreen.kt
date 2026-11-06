@@ -116,7 +116,25 @@ fun GoalsScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(goals) { goal ->
-                GoalCard(goal = goal)
+                GoalCard(
+                    goal = goal,
+                    onCompleteGoal = { goalId ->
+                        scope.launch {
+                            try {
+                                val updatedGoal = withContext(Dispatchers.IO) {
+                                    PrimeMeApiClient.api.completeGoal(goalId)
+                                }
+                                goals = goals.map {
+                                    if (it.id == goalId) updatedGoal else it
+                                }
+                                errorMessage = null
+                            } catch (exception: Exception) {
+                                errorMessage =
+                                    "Unable to complete goal: ${exception.message}"
+                            }
+                        }
+                    }
+                )
             }
         }
     }
@@ -150,7 +168,8 @@ fun GoalsScreen(
 
 @Composable
 private fun GoalCard(
-    goal: ApiGoal
+    goal: ApiGoal,
+    onCompleteGoal: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -177,9 +196,13 @@ private fun GoalCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedButton(
-                onClick = {}
+                onClick = { onCompleteGoal(goal.id) },
+                enabled = goal.progress < 100
             ) {
-                Text("Mark Complete")
+                Text(
+                    if (goal.progress >= 100) "Completed"
+                    else "Mark Complete"
+                )
             }
         }
     }

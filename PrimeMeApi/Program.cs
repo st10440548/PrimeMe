@@ -114,6 +114,39 @@ app.MapPost("/api/goals", async (CreateGoalRequest request) =>
     return Results.Created($"/api/goals/{goal.Id}", goal);
 });
 
+
+app.MapPatch("/api/goals/{id:int}/complete", async (int id) =>
+{
+    await using var connection = new NpgsqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    await using var command = new NpgsqlCommand("""
+        UPDATE goals
+        SET progress = 100
+        WHERE id = @id
+        RETURNING id, title, progress;
+        """, connection);
+
+    command.Parameters.AddWithValue("id", id);
+
+    await using var reader = await command.ExecuteReaderAsync();
+
+    if (!await reader.ReadAsync())
+    {
+        return Results.NotFound(new
+        {
+            error = "Goal not found."
+        });
+    }
+
+    var goal = new Goal(
+        reader.GetInt32(0),
+        reader.GetString(1),
+        reader.GetInt32(2));
+
+    return Results.Ok(goal);
+});
+
 app.Run();
 
 record Goal(int Id, string Title, int Progress);

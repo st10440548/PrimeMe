@@ -4,6 +4,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PATCH
+import retrofit2.http.Path
 import retrofit2.http.Body
 
 data class ApiGoal(
@@ -17,6 +19,11 @@ data class CreateGoalRequest(
 )
 
 interface PrimeMeApi {
+    @PATCH("api/goals/{id}/complete")
+    suspend fun completeGoal(
+        @Path("id") id: Int
+    ): ApiGoal
+
 
     @GET("api/goals")
     suspend fun getGoals(): List<ApiGoal>
