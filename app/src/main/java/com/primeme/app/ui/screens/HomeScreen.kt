@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.primeme.app.data.local.GoalsCache
 import com.primeme.app.data.remote.ApiGoal
+import com.primeme.app.domain.GoalProgress
 import com.primeme.app.data.remote.PrimeMeApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -65,8 +66,8 @@ fun HomeScreen(
             isLoading = false
         }
     }
-    val completed = goals.count { it.progress >= 100 }
-    val score = if (goals.isEmpty()) 0 else (completed * 100 / goals.size)
+    val completed = GoalProgress.completedCount(goals.map { it.progress })
+    val score = GoalProgress.primeScore(goals.map { it.progress })
     Column(
         modifier = modifier
             .fillMaxSize()
