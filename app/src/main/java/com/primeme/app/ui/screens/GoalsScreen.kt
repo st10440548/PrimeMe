@@ -19,6 +19,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import com.primeme.app.data.local.GoalsCache
 import com.primeme.app.ui.localization.LocalIsZulu
 import com.primeme.app.ui.localization.translate
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +45,9 @@ fun GoalsScreen(
 ) {
     val isZulu = LocalIsZulu.current
     fun t(en: String, zu: String) = translate(isZulu, en, zu)
+    val context = LocalContext.current
+    val cache = remember(context) { GoalsCache(context) }
+    var offline by remember { mutableStateOf(false) }
     var goals by remember {
         mutableStateOf<List<ApiGoal>>(emptyList())
     }
@@ -62,14 +67,17 @@ fun GoalsScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
+        val saved = withContext(Dispatchers.IO) { cache.load() }
+        if (saved != null) goals = saved
         try {
-            goals = withContext(Dispatchers.IO) {
-                PrimeMeApiClient.api.getGoals()
-            }
-
+            val remote = withContext(Dispatchers.IO) { PrimeMeApiClient.api.getGoals() }
+            goals = remote
+            withContext(Dispatchers.IO) { cache.save(remote) }
+            offline = false
             errorMessage = null
         } catch (exception: Exception) {
-            errorMessage = "Unable to load goals: ${exception.message}"
+            offline = true
+            errorMessage = if (saved == null) t("No saved goals available. Connect to the internet to sync.", "Azikho izinhloso ezilondoloziwe. Xhuma ku-inthanethi.") else null
         } finally {
             isLoading = false
         }
@@ -99,14 +107,20 @@ fun GoalsScreen(
 
             Button(
                 onClick = {
-                    showAddGoalDialog = true
-                }
+                    if (!offline) showAddGoalDialog = true
+                },
+                enabled = !offline
             ) {
                 Text(t("Add", "Engeza"))
             }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
+
+        if (offline) {
+            Text(t("Offline mode: showing saved goals. Reconnect and reopen Goals to sync.", "Imodi engaxhunyiwe: kuboniswa izinhloso ezilondoloziwe. Xhuma futhi uvule Izinhloso kabusha."))
+            Spacer(modifier = Modifier.height(12.dp))
+        }
 
         if (isLoading) {
             Text(t("Loading goals...", "Kulayishwa izinhloso..."))
@@ -122,6 +136,7 @@ fun GoalsScreen(
             items(goals) { goal ->
                 GoalCard(
                     goal = goal,
+                    offline = offline,
                     onCompleteGoal = { goalId ->
                         scope.launch {
                             try {
@@ -131,6 +146,7 @@ fun GoalsScreen(
                                 goals = goals.map {
                                     if (it.id == goalId) updatedGoal else it
                                 }
+                                withContext(Dispatchers.IO) { cache.save(goals) }
                                 errorMessage = null
                             } catch (exception: Exception) {
                                 errorMessage =
@@ -158,6 +174,7 @@ fun GoalsScreen(
                         }
 
                         goals = goals + newGoal
+                        withContext(Dispatchers.IO) { cache.save(goals) }
                         errorMessage = null
                         showAddGoalDialog = false
                     } catch (exception: Exception) {
@@ -173,6 +190,7 @@ fun GoalsScreen(
 @Composable
 private fun GoalCard(
     goal: ApiGoal,
+    offline: Boolean,
     onCompleteGoal: (Int) -> Unit
 ) {
     val isZulu = LocalIsZulu.current
@@ -203,7 +221,7 @@ private fun GoalCard(
 
             OutlinedButton(
                 onClick = { onCompleteGoal(goal.id) },
-                enabled = goal.progress < 100
+                enabled = goal.progress < 100 && !offline
             ) {
                 Text(
                     if (goal.progress >= 100) t("Completed", "Kuqediwe")
