@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
@@ -19,6 +20,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.primeme.app.ui.localization.LocalIsZulu
+import com.primeme.app.ui.localization.translate
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -26,8 +29,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onLanguageChange: (Boolean) -> Unit = {}
 ) {
+    val isZulu = LocalIsZulu.current
+    fun t(en: String, zu: String) = translate(isZulu, en, zu)
     val context = LocalContext.current
     val preferences = remember(context) {
         context.applicationContext.getSharedPreferences("primeme_settings", android.content.Context.MODE_PRIVATE)
@@ -67,20 +73,20 @@ fun SettingsScreen(
             .padding(20.dp)
     ) {
         Text(
-            text = "Settings",
+            text = t("Settings", "Izilungiselelo"),
             fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "Personalise your PrimeMe experience."
+            text = t("Personalise your PrimeMe experience.", "Yenza i-PrimeMe ifanele wena.")
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Profile",
+            text = t("Profile", "Iphrofayela"),
             fontWeight = FontWeight.SemiBold
         )
 
@@ -95,7 +101,7 @@ fun SettingsScreen(
             },
             modifier = Modifier.fillMaxWidth(),
             label = {
-                Text("Display name")
+                Text(t("Display name", "Igama eliboniswayo"))
             },
             singleLine = true,
             isError = nameError
@@ -105,7 +111,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "Please enter your display name."
+                text = t("Please enter your display name.", "Sicela ufake igama lakho.")
             )
         }
 
@@ -116,7 +122,7 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "Daily Goals",
+            text = t("Daily Goals", "Izinhloso Zansuku Zonke"),
             fontWeight = FontWeight.SemiBold
         )
 
@@ -134,10 +140,10 @@ fun SettingsScreen(
             },
             modifier = Modifier.fillMaxWidth(),
             label = {
-                Text("Daily focus activities")
+                Text(t("Daily focus activities", "Imisebenzi yosuku"))
             },
             supportingText = {
-                Text("Recommended: 1–10 activities")
+                Text(t("Recommended: 1–10 activities", "Kunconywa: imisebenzi engu-1 kuya ku-10"))
             },
             singleLine = true,
             isError = focusError
@@ -145,7 +151,7 @@ fun SettingsScreen(
 
         if (focusError) {
             Text(
-                text = "Enter a number between 1 and 10."
+                text = t("Enter a number between 1 and 10.", "Faka inombolo ephakathi kuka-1 no-10.")
             )
         }
 
@@ -156,14 +162,14 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "Preferences",
+            text = t("Preferences", "Okuncamelayo"),
             fontWeight = FontWeight.SemiBold
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingSwitch(
-            title = "Daily reminders",
+            title = t("Daily reminders", "Izikhumbuzi zansuku zonke"),
             checked = remindersEnabled,
             onCheckedChange = {
                 remindersEnabled = it
@@ -172,13 +178,20 @@ fun SettingsScreen(
         )
 
         SettingSwitch(
-            title = "Dark mode",
+            title = t("Dark mode", "Imodi emnyama"),
             checked = darkModeEnabled,
             onCheckedChange = {
                 darkModeEnabled = it
                 showSavedMessage = false
             }
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(t("Language", "Ulimi"), fontWeight = FontWeight.SemiBold)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(onClick = { preferences.edit().putString("app_language", "en").apply(); onLanguageChange(false) }) { Text("English") }
+            OutlinedButton(onClick = { preferences.edit().putString("app_language", "zu").apply(); onLanguageChange(true) }) { Text("isiZulu") }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -206,14 +219,14 @@ fun SettingsScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Save Preferences")
+            Text(t("Save Preferences", "Londoloza Izilungiselelo"))
         }
 
         if (showSavedMessage) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Preferences saved successfully."
+                text = t("Preferences saved successfully.", "Izilungiselelo zilondoloziwe.")
             )
         }
     }
